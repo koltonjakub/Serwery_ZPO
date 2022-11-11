@@ -24,11 +24,11 @@ class Product:
         return hash((self.name, self.price))
 
 
-class TooManyProductsFoundError:
+class TooManyProductsFoundError(Exception):
     # Reprezentuje wyjątek związany ze znalezieniem zbyt dużej liczby produktów.
     pass
 
-class IncorrectTypeOfParamError:
+class IncorrectTypeOfParamError(Exception):
     # Reprezentuje wyjątek związany z porównywaniem niewłaściwych typów z produktem
     pass
 
@@ -50,11 +50,14 @@ class ListServer(Server):
         self.n_max_returned_entries = 7
 
     def get_entries(self, n_letters: int) -> List[Product]:
-        pattern = '^[a-zA-Z]{n}[0-9]{2-3}$'.replace('n',str(n_letters))
+        pattern = '^[a-zA-Z]{n}[0-9]{2,3}$'.replace('n',str(n_letters))
         found_products = [p for p in self.products if fullmatch(pattern, p.name)]
+        for p in self.products:
+            print(fullmatch(pattern, p.name))
+
         if len(found_products) > self.n_max_returned_entries:
             raise TooManyProductsFoundError
-        return found_products
+        return sorted(found_products, key=lambda x: x.price)
 
 class MapServer(Server):
     # typ dict, kluczem jest nazwa produktu, wartością – obiekt reprezentujący produkt
@@ -63,12 +66,12 @@ class MapServer(Server):
         self.n_max_returned_entries = 7
 
     def get_entries(self, n_letters: int) -> List[Product]:
-        pattern = '^[a-zA-Z]{n}[0-9]{2-3}$'.replace('n',str(n_letters))
+        pattern = '^[a-zA-Z]{n}[0-9]{2,3}$'.replace('n',str(n_letters))
         found_products = [p for name, p in self.products.items() if fullmatch(pattern, name)]
         if len(found_products) > self.n_max_returned_entries:
             raise TooManyProductsFoundError()
             #Nawiasy może ()
-        return found_products
+        return sorted(found_products, key=lambda x: x.price)
 
 class Client:
     # FIXME: klasa powinna posiadać metodę inicjalizacyjną przyjmującą obiekt reprezentujący serwer
@@ -78,7 +81,7 @@ class Client:
 
     def get_total_price(self, n_letters: Optional[int] = 1) -> Optional[float]:
         try:
-            found_products = server.get_entries(n_letters)
+            found_products = self.server.get_entries(n_letters)
         except TooManyProductsFoundError():
             return None
         else:

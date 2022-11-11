@@ -15,7 +15,7 @@ Q: z kolei serwer tworzy instancję produktu, jeśli natrafi na pasujący do sch
 A:
 
 Q: REGEX
-A: pattern = '^[a-zA-Z]+[0-9]+$'
+A: pattern = '^[a-zA-Z]{n_letters}[0-9]{2,3}+$'
 A: w konstruktorze
 A: if re.fullmatch(apttern, str):
 A: else:
