@@ -39,13 +39,22 @@ class IncorrectTypeOfParamError:
 #   dopuszczalną liczbę wyników wyszukiwania,
 #   (3) możliwość odwołania się do metody `get_entries(self, n_letters)` zwracającą listę produktów spełniających kryterium wyszukiwania
 
+class Server:
+    @abstractmethod
+    def get_entries(self, n_letters: int) -> List[Product]:
+        pass
 
-class ListServer:
-    pass
+class ListServer(Server):
+    def __init__(self, products: List[Product]):
+        self.products = [Product(p.name, p.price) for p in deepcopy(products)]
+        self.n_max_returned_entries = 7
 
 
-class MapServer:
-    pass
+class MapServer(Server):
+    # typ dict, kluczem jest nazwa produktu, wartością – obiekt reprezentujący produkt
+    def __init__(self, products: List[Product]):
+        self.products = {p.name: Product(p.name, p.price) for p in deepcopy(products)}
+        self.n_max_returned_entries = 7
 
 
 class Client:
