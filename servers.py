@@ -49,6 +49,12 @@ class ListServer(Server):
         self.products = [Product(p.name, p.price) for p in deepcopy(products)]
         self.n_max_returned_entries = 7
 
+    def get_entries(self, n_letters: int) -> List[Product]:
+        pattern = '^[a-zA-Z]{n}[0-9]{2-3}$'.replace('n',str(n_letters))
+        found_products = [p for p in self.products if fullmatch(pattern, p.name)]
+        if len(found_products) > self.n_max_returned_entries:
+            raise TooManyProductsFoundError
+        return found_products
 
 class MapServer(Server):
     # typ dict, kluczem jest nazwa produktu, wartością – obiekt reprezentujący produkt
@@ -56,6 +62,12 @@ class MapServer(Server):
         self.products = {p.name: Product(p.name, p.price) for p in deepcopy(products)}
         self.n_max_returned_entries = 7
 
+    def get_entries(self, n_letters: int) -> List[Product]:
+        pattern = '^[a-zA-Z]{n}[0-9]{2-3}$'.replace('n',str(n_letters))
+        found_products = [p for name, p in self.products.items() if fullmatch(pattern, name)]
+        if len(found_products) > self.n_max_returned_entries:
+            raise TooManyProductsFoundError
+        return found_products
 
 class Client:
     # FIXME: klasa powinna posiadać metodę inicjalizacyjną przyjmującą obiekt reprezentujący serwer
