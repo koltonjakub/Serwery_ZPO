@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import re
+
 from typing import Optional, List, Dict
 from abc import abstractmethod
 from copy import deepcopy
