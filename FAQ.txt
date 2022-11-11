@@ -1,0 +1,22 @@
+Q: kwestia współdzielenia serwerów przez klientów?
+A:
+
+Q: czy dostaniemy jakieś bardziej rozbudowane testowe dane?
+A: chyba nie, sami sobie dopiszemy
+
+Q: funkckjonalności własnego wyjątku, czy on powinien robić cokolwiek poza byciem wyrzuconym?
+A: tylko raise ValueError, nic poza tym
+
+Q: api, jak rozumiem nie ma go w schemacie zadania?
+A: trzeba zrobić własną klasę abstrakcyjną, która będzie interfejsem dla dwóch klas dziedziczących serwerów
+
+Q: możnaby zrobić tak, że do konstruktora klienta wrzucamy instancję każdego typu serwera,
+Q: z kolei serwer tworzy instancję produktu, jeśli natrafi na pasujący do schematu produkt
+A:
+
+Q: REGEX
+A: pattern = '^[a-zA-Z]+[0-9]+$'
+A: w konstruktorze
+A: if re.fullmatch(apttern, str):
+A: else:
+A:      raise ValueError
