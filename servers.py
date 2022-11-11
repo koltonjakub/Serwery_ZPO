@@ -66,13 +66,25 @@ class MapServer(Server):
         pattern = '^[a-zA-Z]{n}[0-9]{2-3}$'.replace('n',str(n_letters))
         found_products = [p for name, p in self.products.items() if fullmatch(pattern, name)]
         if len(found_products) > self.n_max_returned_entries:
-            raise TooManyProductsFoundError
+            raise TooManyProductsFoundError()
+            #Nawiasy może ()
         return found_products
 
 class Client:
     # FIXME: klasa powinna posiadać metodę inicjalizacyjną przyjmującą obiekt reprezentujący serwer
+    def __init__(self, server: Server):
+        self.server = server
 
-    def get_total_price(self, n_letters: Optional[int]) -> Optional[float]:
-        raise NotImplementedError()
 
+    def get_total_price(self, n_letters: Optional[int] = 1) -> Optional[float]:
+        try:
+            found_products = server.get_entries(n_letters)
+        except TooManyProductsFoundError():
+            return None
+        else:
+            if len(found_products)==0:
+                return None
+            else:
+                return sum([p.price for p in found_products])
+    
 
