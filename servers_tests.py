@@ -7,7 +7,6 @@ server_types = (ListServer, MapServer)
 
 
 class ServerTest(unittest.TestCase):
-
     def test_get_entries_returns_proper_entries(self):
         products = [Product('P12', 1), Product('PP234', 2), Product('PP235', 1)]
         for server_type in server_types:
@@ -23,6 +22,15 @@ class ClientTest(unittest.TestCase):
             server = server_type(products)
             client = Client(server)
             self.assertEqual(5, client.get_total_price(2))
+
+
+class ExceptionTest(unittest.TestCase):
+    def test_too_many_products(self):
+        products = [Product('PP234', 2), Product('PP235', 2), Product('PP236', 2), Product('PP237', 2), Product('PP238', 2), Product('PP239', 2), Product('PP240', 2), Product('PP241', 2)]
+        for server_type in server_types:
+            server = server_type(products)
+            client = Client(server)
+            self.assertEqual(client.get_total_price(2), None)
 
 
 if __name__ == '__main__':

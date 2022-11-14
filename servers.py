@@ -24,11 +24,11 @@ class Product:
         return hash((self.name, self.price))
 
 
-class TooManyProductsFoundError(Exception):
+class TooManyProductsFoundError(BaseException):
     # Reprezentuje wyjątek związany ze znalezieniem zbyt dużej liczby produktów.
     pass
 
-class IncorrectTypeOfParamError(Exception):
+class IncorrectTypeOfParamError(BaseException):
     # Reprezentuje wyjątek związany z porównywaniem niewłaściwych typów z produktem
     pass
 
@@ -52,9 +52,6 @@ class ListServer(Server):
     def get_entries(self, n_letters: int) -> List[Product]:
         pattern = '^[a-zA-Z]{n}[0-9]{2,3}$'.replace('n',str(n_letters))
         found_products = [p for p in self.products if fullmatch(pattern, p.name)]
-        for p in self.products:
-            print(fullmatch(pattern, p.name))
-
         if len(found_products) > self.n_max_returned_entries:
             raise TooManyProductsFoundError
         return sorted(found_products, key=lambda x: x.price)
@@ -67,10 +64,9 @@ class MapServer(Server):
 
     def get_entries(self, n_letters: int) -> List[Product]:
         pattern = '^[a-zA-Z]{n}[0-9]{2,3}$'.replace('n',str(n_letters))
-        found_products = [p for name, p in self.products.items() if fullmatch(pattern, name)]
+        found_products = [p for name, p in self.products.items() if fullmatch(pattern, p.name)]
         if len(found_products) > self.n_max_returned_entries:
-            raise TooManyProductsFoundError()
-            #Nawiasy może ()
+            raise TooManyProductsFoundError
         return sorted(found_products, key=lambda x: x.price)
 
 class Client:
@@ -82,10 +78,10 @@ class Client:
     def get_total_price(self, n_letters: Optional[int] = 1) -> Optional[float]:
         try:
             found_products = self.server.get_entries(n_letters)
-        except TooManyProductsFoundError():
+        except TooManyProductsFoundError:
             return None
         else:
-            if len(found_products)==0:
+            if len(found_products) == 0:
                 return None
             else:
                 return sum([p.price for p in found_products])
