@@ -33,5 +33,17 @@ class ExceptionTest(unittest.TestCase):
             self.assertEqual(client.get_total_price(2), None)
 
 
+class EmptyEntryListTest(unittest.TestCase):
+    def test_too_many_products(self):
+        products = [Product('1P234', 2), Product('PP23', 2), Product('&P234', 2), Product('P*234', 2),
+                    Product('P123*', 2), Product('P12P', 2), Product('PPP', 2), Product('1233', 2)]
+        for server_type in server_types:
+            server = server_type(products)
+            client = Client(server)
+            self.assertEqual(client.get_total_price(1), None)
+
+#TODO testy dla różnych długości n = [1, 2, 3, ...]
+#TODO dane wejściowe dobre, część może być zła np ilość liter nie zawierająca się w n
+
 if __name__ == '__main__':
     unittest.main()
