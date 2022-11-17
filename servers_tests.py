@@ -45,5 +45,19 @@ class EmptyEntryListTest(unittest.TestCase):
 #TODO testy dla różnych długości n = [1, 2, 3, ...]
 #TODO dane wejściowe dobre, część może być zła np ilość liter nie zawierająca się w n
 
+class DiffrentN_letterTest(unittest.TestCase):
+    def test_too_many_products(self):
+        products = [Product('P12', 1), Product('P13', 1), Product('P14', 1), Product('P1P', 1), Product('P2P', 1),
+                    Product('PP12', 2), Product('PP13', 2), Product('PP14', 2), Product('PP1P', 2), Product('PP2P', 2),
+                    Product('PPP12', 3), Product('PPP13', 3), Product('PPP14', 3), Product('PPP1P', 3), Product('PPP2P', 3),
+                    Product('PPPP12', 4), Product('PPPP13', 4), Product('PPPP14', 4), Product('PPPP1P', 4), Product('PPPP2P', 4)]
+        n_entries = [1, 2, 3, 4]
+        proper_results = [3, 6, 9, 12]
+        for server_type in server_types:
+            for n, expected in zip(n_entries, proper_results):
+                server = server_type(products)
+                client = Client(server)
+                self.assertEqual(client.get_total_price(n), expected)
+
 if __name__ == '__main__':
     unittest.main()
