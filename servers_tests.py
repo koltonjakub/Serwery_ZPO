@@ -1,7 +1,7 @@
 import unittest
 from collections import Counter
-
 from servers import ListServer, Product, Client, MapServer
+
 
 server_types = (ListServer, MapServer)
 
@@ -42,8 +42,6 @@ class EmptyEntryListTest(unittest.TestCase):
             client = Client(server)
             self.assertEqual(client.get_total_price(1), None)
 
-#TODO testy dla różnych długości n = [1, 2, 3, ...]
-#TODO dane wejściowe dobre, część może być zła np ilość liter nie zawierająca się w n
 
 class DiffrentN_letterTest(unittest.TestCase):
     def test_too_many_products(self):
@@ -58,6 +56,7 @@ class DiffrentN_letterTest(unittest.TestCase):
                 server = server_type(products)
                 client = Client(server)
                 self.assertEqual(client.get_total_price(n), expected)
+
 
 if __name__ == '__main__':
     unittest.main()
